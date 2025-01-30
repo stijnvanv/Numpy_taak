@@ -1,9 +1,13 @@
 # Numpy taak - Stijn Van Vlaenderen 
 ## 1 setup
 ### 1. 1 docker image  
-Dockerfile + requirements file die gebruikt was is te vinden in de huidige folder
-docker image is built en staatop github 
-"we moeten een afbeelding zoeken en daar manipulaties op doen"  
+Docker image gebruikt om deze code te runnen is te vinden op:  
+```console
+docker pull stijnvanvl/taaknumpy:latest
+```
+```console
+docker run -it stijnvanvl/taaknumpy:latest
+```
 
 ### 1.2 github commands  
 
