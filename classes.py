@@ -3,6 +3,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 import re
+import os
 
 
 class ImageAsNpArray:
@@ -197,6 +198,7 @@ class ImageHandler:
     def __init__(self, image_path):
         self.image = ImageAsNpArray(image_path)
         self.transformations = Transformations()
+        self.final_image = None
 
     def apply_transformation_sequence(self, transformations_as_csv_string):
         pattern = re.compile(r'([a-zA-Z_]+(?:\([^\)]*\))?)')
@@ -262,13 +264,30 @@ class ImageHandler:
             pass
         pass
 
-    def plot_grid(self, transformation_grid):
-        """
-        Apply transformations based on the grid and then display the resulting image.
-        """
-        final_image = self.filling_engine_hardcoded(transformation_grid)
-        print(final_image.shape)
-        plt.imshow(final_image)
-        plt.title("Transformed Image Grid")
-        plt.show()
+    def make_grid(self, transformation_grid):
+        if not self.final_image:
+            self.final_image = self.filling_engine_hardcoded(transformation_grid)
+        else:
+            print("Handler already contains a grid")
 
+    def reset_handler(self):
+        self.final_image = None
+
+    def plot_grid(self, transformation_grid):
+        if not self.final_image:
+            plt.imshow(self.final_image)
+            plt.title("Transformed Image Grid")
+            plt.show()
+        else:
+            print("Make a grid first by calling make_grid.")
+
+    def save_grid_as(self, name, file_extension = "png"):
+        if not os.path.exists('images'):
+            os.makedirs('images')
+        if self.final_image is not None:
+            file_path = os.path.join('images', f"{name}.{file_extension}")
+            image = Image.fromarray(self.final_image)
+            image.save(file_path)
+            print(f"Image saved as {file_path}")
+        else:
+            print("Make a grid first by calling make_grid.")
