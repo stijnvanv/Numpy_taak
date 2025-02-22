@@ -88,25 +88,27 @@ The constructor initializes the image data from a file path, converts it to the 
 - `transformations_used`: Tracks the transformations applied to the image.
 - `path_to_image`: Path to the image file (optional).
 
+#### 3.1.2 Methods  
+
 ---
   
 ### 3.2. Transformations
 
-The `Transformations` class provides a variety of image manipulation methods. These methods apply basic transformations like flipping, filtering, resizing, and convolution to the image.
+The `Transformations` class provides a variety of image manipulation methods. These methods apply basic transformations like flipping, filtering, resizing, and convoluting the image.
   
 #### 3.2.1 Methods
 
-- **upside_down**: Flips the image vertically.
-- **left_to_right**: Flips the image horizontally.
-- **diagonal**: Combines both upside down and left to right flips.
-- **red_filter**: Removes the green and blue channels, leaving only the red channel visible.
-- **green_filter**: Removes the red and blue channels, leaving only the green channel visible.
-- **blue_filter**: Removes the red and green channels, leaving only the blue channel visible.
-- **empty**: Replaces all pixels with zeros (black image).
-- **resize_horizontally**: Resizes the image horizontally by a factor.
-- **resize_vertically**: Resizes the image vertically by a factor.
-- **resize**: Resizes the image both horizontally and vertically using a tuple of factors.
-- **convolve**: Applies a kernel (such as a Gaussian or sharpen filter) to the image via convolution.
+- `upside_down`: Flips the image vertically.
+- `left_to_right`: Flips the image horizontally.
+- `diagonal`: Combines both upside down and left to right flips.
+- `red_filter`: Removes the green and blue channels, leaving only the red channel visible.
+- `green_filter`: Removes the red and blue channels, leaving only the green channel visible.
+- `blue_filter`: Removes the red and green channels, leaving only the blue channel visible.
+- `empty`: Replaces all pixels with zeros (black image).
+- `resize_horizontally`: Resizes the image horizontally by a factor.
+- `resize_vertically`: Resizes the image vertically by a factor.
+- `resize`: Resizes the image both horizontally and vertically using a tuple of factors.
+- `convolve`: Applies a kernel (e.g. Gaussian or sharpen) to the image via convolution.
 
 ---
   

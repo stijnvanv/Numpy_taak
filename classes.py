@@ -1,6 +1,4 @@
 from abc import abstractmethod, ABC
-from idlelib.pyparse import trans
-
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt

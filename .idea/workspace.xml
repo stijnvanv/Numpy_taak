@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1cb91a8c-707b-49de-bb7c-4a0d12288de8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/TaakNumpy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TaakNumpy.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +37,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.classes.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -48,11 +51,15 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="PyCoverageOptionsProvider">
+    <option name="myUseBundledCoveragePy" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\stijn\PycharmProjects\TaakNumpy" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\stijn\PycharmProjects\TaakNumpy\images" />
       <recent name="C:\Users\stijn\PycharmProjects\TaakNumpy" />
     </key>
   </component>
@@ -73,7 +80,17 @@
       <option name="presentableId" value="Default" />
       <updated>1738197771839</updated>
       <workItem from="1738197772882" duration="4166000" />
-      <workItem from="1738202973962" duration="2386000" />
+      <workItem from="1738202973962" duration="2944000" />
+      <workItem from="1738238431527" duration="1482000" />
+      <workItem from="1738576071865" duration="59000" />
+      <workItem from="1738654847982" duration="166000" />
+      <workItem from="1738655026225" duration="2601000" />
+      <workItem from="1738657658918" duration="32800000" />
+      <workItem from="1738806582490" duration="36280000" />
+      <workItem from="1738867067540" duration="800000" />
+      <workItem from="1738867882826" duration="43664000" />
+      <workItem from="1739420318044" duration="10439000" />
+      <workItem from="1740059514636" duration="27903000" />
     </task>
     <servers />
   </component>
@@ -81,6 +98,10 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/classes_py$classes.coverage" NAME="classes Coverage Results" MODIFIED="1740183176517" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/TaakNumpy$main.coverage" NAME="main Coverage Results" MODIFIED="1738205211922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/main_py$main.coverage" NAME="main Coverage Results" MODIFIED="1739427019328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/main_py$classes.coverage" NAME="classes Coverage Results" MODIFIED="1739420547031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/classes_py$main.coverage" NAME="main Coverage Results" MODIFIED="1740181807932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
