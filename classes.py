@@ -1,4 +1,6 @@
-from abc import abstractclassmethod, abstractmethod, ABC
+from abc import abstractmethod, ABC
+from idlelib.pyparse import trans
+
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -28,7 +30,6 @@ class ImageAsNpArray:
         str_transformation = transformation_function.__name__ + " from " + type(
             transformation_function.__self__).__name__
         self.transformations_used.append(str_transformation)
-        print(self.make_plot_title() + " executed!")
         self.transformations_used.pop()
         return ImageAsNpArray.from_transformation(np_array, str_transformation, self)
 
@@ -109,18 +110,19 @@ class Transformations:
                     np_array_out[i, j, channel] = np.sum(region * np_kernel)
 
         np_array_out = np.clip(np_array_out, 0, 255).astype(np.uint8)
-        print("i convolved")
         return np_array_out
 
 
-class Kernel:
+import numpy as np
+from abc import ABC, abstractmethod
+
+class Kernel(ABC):
     def __init__(self):
-        self.name = None
-        self.np_kernel = None
         self.create_np_kernel()
+        self.normalise()
 
     def normalise(self):
-        self.np_kernel = self.np_kernel/np.sum(self.np_kernel)
+        self.np_kernel = self.np_kernel / np.sum(self.np_kernel)
 
     def __str__(self):
         return f"{self.np_kernel}"
@@ -129,69 +131,70 @@ class Kernel:
     def create_np_kernel(self):
         pass
 
-class Identity(Kernel, ABC):
-    def __init__(self, size = 3):
-        super().__init__()
-        self.name = "identity"
-        self.size = size
-        self.create_np_kernel()
 
-    def create_np_array(self):
+class Identity(Kernel):
+    def __init__(self, size=3):
+        self.size = size
+        super().__init__()
+
+    def create_np_kernel(self):
         np_array = np.zeros((self.size, self.size))
         loc = self.size // 2
-        np_array[loc,loc] = 1
+        np_array[loc, loc] = 1
+        self.np_kernel = np_array
 
-class GaussianKernel(Kernel, ABC):
-    def __init__(self, sigma = 1, size = 5):
-        super().__init__()
-        self.name = "gauss"
+
+class GaussianKernel(Kernel):
+    def __init__(self, size, sigma=0.2):
         self.sigma = sigma
         self.size = size
-        self.create_np_array()
-        self.normalise()
+        super().__init__()
 
-    def create_np_array(self):
+    def create_np_kernel(self):
         self.np_kernel = np.fromfunction(
             lambda x, y: (1 / (2 * np.pi * self.sigma ** 2)) * np.exp(
                 - ((x - (self.size - 1) / 2) ** 2 + (y - (self.size - 1) / 2) ** 2) / (2 * self.sigma ** 2)),
             (self.size, self.size)
         )
 
-class RidgeKernel(Kernel, ABC):
+
+class HorizontalEdgeKernel(Kernel):
     def __init__(self):
-        super().__init__()
-        self.name = "ridge"
-        self.create_np_array() #geen normalisatie hier!!
+        self.create_np_kernel()
 
-    def create_np_array(self):
-        self.np_kernel = np.array([[0, -1, 0],
-                  [-1, 4, -1],
-                  [0, -1, 0]])
+    def create_np_kernel(self):
+        self.np_kernel = np.array([[-1, -2, -1],
+                                    [0, 0, 0],
+                                    [1, 2, 1]])
 
-class Sharpen(Kernel, ABC):
+
+class VerticalEdgeKernel(Kernel):
     def __init__(self):
-        super().__init__()
-        self.name = "sharpen"
-        self.create_np_array()
+        self.create_np_kernel()
 
-    def create_np_array(self):
-        #idialiter id-laplaciaan
-        self.np_kernel = np.array([[0,0,-1,0,0],
-                                   [0,-1, -2, -1, 0],
-                                   [-1,-2, 17,-2, -1],
-                                   [0, -1,-2,-1, 0],
-                                   [0,0,-1,0,0]])
+    def create_np_kernel(self):
+        self.np_kernel = np.array([[-1, 0, 1],
+                                   [-2, 0, 2],
+                                   [-1, 0, 1]])
 
-class BoxBlur(Kernel, ABC):
+
+class BoxBlur(Kernel):
     def __init__(self, size):
-        super().__init__()
-        self.name = "boxblur"
         self.size = size
-        self.create_np_array()
-        self.normalise()
+        super().__init__()
 
-    def create_np_array(self):
+    def create_np_kernel(self):
         self.np_kernel = np.ones((self.size, self.size))
+
+
+class KernelFromNpArray(Kernel):
+    def __init__(self, np_array, normalise = False):
+        self.np_kernel = np_array
+        if normalise:
+            self.normalise()
+
+    def create_np_kernel(self):
+        pass
 
 
 class ImageHandler:
@@ -203,7 +206,6 @@ class ImageHandler:
     def apply_transformation_sequence(self, transformations_as_csv_string):
         pattern = re.compile(r'([a-zA-Z_]+(?:\([^\)]*\))?)')
         transformations = pattern.findall(transformations_as_csv_string)
-        print(transformations)
         x = self.image
         for transformation in transformations:
             match_resize = re.search(r'resize\((\d+),(\d+)\)', transformation)
@@ -215,17 +217,20 @@ class ImageHandler:
             elif match_convolve:
                 kernel_type = match_convolve.group(1)
                 transformation = "convolve"
-                print(kernel_type)
                 if kernel_type == "identity":
                     size = int(match_convolve.group(2))
                     kernel = Identity(size)
                 elif kernel_type == "gauss":
                     sigma, size = int(match_convolve.group(2)), int(match_convolve.group(3))
                     kernel = GaussianKernel(sigma, size)
-                elif kernel_type == "ridge":
-                    kernel = RidgeKernel()
+                elif kernel_type == "horizontaledge":
+                    kernel = HorizontalEdgeKernel()
+                elif kernel_type == "verticaledge":
+                    kernel = VerticalEdgeKernel()
                 elif kernel_type == "sharpen":
-                    kernel = Sharpen()
+                    id_kern = Identity(3)
+                    gauss_kern = GaussianKernel(3,0.3)
+                    kernel =  KernelFromNpArray(2*id_kern.np_kernel - gauss_kern.np_kernel)
                 elif kernel_type == "boxblur":
                     size = int(match_convolve.group(2))
                     kernel = BoxBlur(size)
@@ -241,8 +246,8 @@ class ImageHandler:
         for i, row in enumerate(grid):
             for j, item in enumerate(row):
                 if item != "filled":
-                    transformed_element = self.apply_transformation_sequence(item).np_array
-                    transformed_elements.append((transformed_element,i,j))
+                    transformed_element = self.apply_transformation_sequence(item)
+                    transformed_elements.append((transformed_element.np_array,i,j))
         return transformed_elements
 
     def filling_engine_hardcoded(self, grid):
@@ -264,24 +269,24 @@ class ImageHandler:
             pass
         pass
 
-    def make_grid(self, transformation_grid):
+    def make_grid(self, transformation_grid, plot_grid = True):
         if not self.final_image:
             self.final_image = self.filling_engine_hardcoded(transformation_grid)
+            if plot_grid:
+                self.plot_grid()
         else:
             print("Handler already contains a grid")
 
     def reset_handler(self):
         self.final_image = None
+        print('The image handler has been reset.\nIf you want to continue give it a new grid to transform.')
 
-    def plot_grid(self, transformation_grid):
-        if not self.final_image:
-            plt.imshow(self.final_image)
-            plt.title("Transformed Image Grid")
-            plt.show()
-        else:
-            print("Make a grid first by calling make_grid.")
+    def plot_grid(self):
+        plt.imshow(self.final_image)
+        plt.title("Transformed Image Grid")
+        plt.show()
 
-    def save_grid_as(self, name, file_extension = "png"):
+    def save_grid_as(self, name, file_extension = "png", reset = True):
         if not os.path.exists('images'):
             os.makedirs('images')
         if self.final_image is not None:
@@ -289,5 +294,7 @@ class ImageHandler:
             image = Image.fromarray(self.final_image)
             image.save(file_path)
             print(f"Image saved as {file_path}")
+            if reset:
+                self.reset_handler()
         else:
             print("Make a grid first by calling make_grid.")
